@@ -1,0 +1,145 @@
+<html>
+<center>
+<script>
+var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var dat = new Date();
+var curday = dat.getDate();
+var curmon = dat.getMonth() + 1;
+var curyear = dat.getFullYear();
+var startyear =  dat.getFullYear()-100;
+var endyear = dat.getFullYear();
+function checkleapyear(datea) {
+    if (datea.getYear() % 4 == 0) {
+        if (datea.getYear() % 10 != 0) {
+            return true;
+        } else {
+            if (datea.getYear() % 400 == 0) return true;
+            else return false;
+        }
+    }
+    return false;
+}
+
+function DaysInMonth(Y, M) {
+    with(new Date(Y, M, 1, 12)) {
+        setDate(0);
+        return getDate();
+    }
+}
+
+function datediff(date1, date2) {
+    var y1 = date1.getFullYear(),
+        m1 = date1.getMonth(),
+        d1 = date1.getDate(),
+        y2 = date2.getFullYear(),
+        m2 = date2.getMonth(),
+        d2 = date2.getDate();
+    if (d1 < d2) {
+        m1--;
+        d1 += DaysInMonth(y2, m2);
+    }
+    if (m1 < m2) {
+        y1--;
+        m1 += 12;
+    }
+    return [y1 - y2, m1 - m2, d1 - d2];
+}
+
+function calage() {
+    var calday = document.birthday.day.options[document.birthday.day.selectedIndex].value;
+    var calmon = document.birthday.month.options[document.birthday.month.selectedIndex].value;
+    var calyear = document.birthday.year.options[document.birthday.year.selectedIndex].value;
+    if (curday == "" || curmon == "" || curyear == "" || calday == "" || calmon == "" || calyear == "") {
+        alert("please fill all the values..!!");
+    } else {
+        var curd = new Date(curyear, curmon - 1, curday);
+        var cald = new Date(calyear, calmon - 1, calday);
+        
+        var diff = Date.UTC(curyear, curmon, curday, 0, 0, 0) - Date.UTC(calyear, calmon, calday, 0, 0, 0);
+        var dife = datediff(curd, cald);
+        document.birthday.age.value = dife[0] + " বছর, " + dife[1] + " মাস, এবং " + dife[2] + " দিন";
+        var monleft = (dife[0] * 12) + dife[1];
+        var secleft = diff / 1000 / 60;
+        var hrsleft = (secleft / 60);
+        var daysleft = (hrsleft / 24);
+        document.birthday.months.value = monleft + " মাস বেঁচে আছেন";
+        document.birthday.daa.value = daysleft + " দিন বেঁচে আছেন";
+        document.birthday.hours.value = hrsleft + " ঘন্টা বেঁচে আছেন";
+        document.birthday.min.value = secleft + " মিনিট বেঁচে আছেন";
+        document.birthday.sec.value = (secleft*60) + " সেকেন্ড বেঁচে আছেন";
+        var as = parseInt(calyear) + dife[0] + 1;
+        var diff = Date.UTC(as, calmon, calday, 0, 0, 0) - Date.UTC(curyear, curmon, curday, 0, 0, 0);
+        var datee = diff / 1000 / 60 / 60 / 24;
+        document.birthday.nbday.value = datee + " দিন পরে আপনার Birthday";
+    }
+}
+</script>
+<h1><b>বয়স গণক</b></h1>
+<p>আপনার বয়স বছর, মাস, দিন, ঘন্টা, মিনিট এবং সেকেন্ডে হিসাব করুন</p>
+<table width="320px;;" border="0" cellspacing="0" cellpadding="0">
+   <tbody>
+      <tr>
+         <td>
+<p><b>জন্ম তারিখ-মাস-বছর নির্বাচন করুন</b></p>
+            <form name="birthday">
+               <span class="date">তারিখ</span>&nbsp;<b>:</b>&nbsp;
+               <select name="day" size="1" >
+                  <script type="text/javascript">for(var j=1;j<32;j++)document.write("<option value="+j+">"+j+"</option>");</script>
+               </select>
+
+               <span class="date">মাস</span>&nbsp;<b >:</b>&nbsp;
+               <select name="month" size="1" >
+                  <script type="text/javascript">for(var i=1;i<13;i++)document.write("<option value="+i+">"+mS[i-1]+"</option>");</script>
+               </select>
+
+          <span class="date ">বছর</span>&nbsp;<b >:</b>&nbsp;
+               <select name="year" size="1">
+                  <script type="text/javascript">for(var k=startyear;k<=endyear;k++)document.write("<option value="+k+">"+k+"</option>");</script>
+               </select>
+
+<p style="text-align:center;">
+              <input class="button" name="start" onclick="calage()" value="Calculate" type="button" style="width:100px; margin: 0 auto;">
+       </p>        
+               
+               <input name="age" value="Result"  style="width:100%;">
+               <p class="date1">আপনি বেঁচে আছেন যতদিন থেকে:</p>
+               <table class="table-condensed" style="width:100%">
+                  <tbody>
+                     <tr>
+                        <td class="date-red">মাস হিসেবে</b></td>
+                        <td><input name="months" style="width:100%;"></td>
+                     </tr>
+                     <tr>
+                        <td class="date-red">দিন হিসেবে</td>
+                        <td><input name="daa" style="width:100%;"></td>
+                     </tr>
+                     <tr>
+                        <td class="date-red">ঘন্টা হিসেবে</td>
+                        <td><input name="hours" style="width:100%;"></td>
+                     </tr>
+                     <tr>
+                        <td class="date-red">মিনিট হিসেবে</td>
+                        <td><input name="min" style="width:100%;"></td>
+                     </tr>
+                      <tr>
+                        <td class="date-red">সেকেন্ডে হিসেবে</td>
+                        <td><input name="sec" style="width:100%;"></td>
+                     </tr>
+                     <tr>
+                        <td colspan="2" class="date-red">আপনার পরবর্তী জন্মদিনটি আসতে যতদিন বাকী তা নিম্নরূপ:</b></td>
+                     </tr>
+                     <tr>
+                        <td colspan="2"><input name="nbday" style="width:100%;"></td>
+                     </tr>
+                  </tbody>
+               </table>
+            </form>
+         </td>
+         <td width="10">&nbsp;</td>
+      </tr>
+   </tbody>
+</table>
+<br/>
+<b> সাথে থাকার জন্য অসংখ্য ধন্যবাদ🥰আমার ব্যক্তিগত সাইট টি ঘুরে দেখতে <a href="https://shakil-ahmmed.github.io/.org/" target="_blank"> এখানে ক্লিক করুন</a></b>
+</center>
+</html>
